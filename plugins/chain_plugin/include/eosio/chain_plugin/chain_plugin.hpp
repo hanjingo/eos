@@ -45,10 +45,11 @@ namespace eosio {
 namespace chain_apis {
 struct empty{};
 
+//权限
 struct permission {
-   name              perm_name;
-   name              parent;
-   authority         required_auth;
+   name              perm_name;     //
+   name              parent;        //
+   authority         required_auth; //
 };
 
 template<typename>
@@ -63,26 +64,26 @@ Type convert_to_type(const string& str, const string& desc) {
 }
 
 template<>
-uint64_t convert_to_type(const string& str, const string& desc);
+uint64_t convert_to_type(const string& str, const string& desc); //str转uint64_t
 
 template<>
-double convert_to_type(const string& str, const string& desc);
+double convert_to_type(const string& str, const string& desc); //str转double
 
 template<typename Type>
-string convert_to_string(const Type& source, const string& key_type, const string& encode_type, const string& desc);
+string convert_to_string(const Type& source, const string& key_type, const string& encode_type, const string& desc); //其他类型转string
 
 template<>
-string convert_to_string(const chain::key256_t& source, const string& key_type, const string& encode_type, const string& desc);
+string convert_to_string(const chain::key256_t& source, const string& key_type, const string& encode_type, const string& desc); //key256_t转string
 
 template<>
-string convert_to_string(const float128_t& source, const string& key_type, const string& encode_type, const string& desc);
+string convert_to_string(const float128_t& source, const string& key_type, const string& encode_type, const string& desc); //float128转string
 
 
-class read_only {
-   const controller& db;
-   const fc::optional<account_query_db>& aqdb;
-   const fc::microseconds abi_serializer_max_time;
-   bool  shorten_abi_errors = true;
+class read_only { //只读类
+   const controller& db;                           //控制器
+   const fc::optional<account_query_db>& aqdb;     //账号查询表
+   const fc::microseconds abi_serializer_max_time; //abi序列化超时
+   bool  shorten_abi_errors = true;                //??
 
 public:
    static const string KEYi64;
@@ -96,137 +97,137 @@ public:
 
    using get_info_params = empty;
 
-   struct get_info_results {
-      string                  server_version;
-      chain::chain_id_type    chain_id;
-      uint32_t                head_block_num = 0;
-      uint32_t                last_irreversible_block_num = 0;
-      chain::block_id_type    last_irreversible_block_id;
-      chain::block_id_type    head_block_id;
-      fc::time_point          head_block_time;
-      account_name            head_block_producer;
+   struct get_info_results { //获得块信息结果
+      string                  server_version;                  //服务版本
+      chain::chain_id_type    chain_id;                        //链id
+      uint32_t                head_block_num = 0;              //头块号
+      uint32_t                last_irreversible_block_num = 0; //最后一个固定的块号
+      chain::block_id_type    last_irreversible_block_id;      //最后一个固定的块id
+      chain::block_id_type    head_block_id;                   //头块id
+      fc::time_point          head_block_time;                 //头块时间
+      account_name            head_block_producer;             //头块生产者
 
-      uint64_t                virtual_block_cpu_limit = 0;
-      uint64_t                virtual_block_net_limit = 0;
+      uint64_t                virtual_block_cpu_limit = 0;     //虚拟块cpu限制
+      uint64_t                virtual_block_net_limit = 0;     //虚拟块net限制
 
-      uint64_t                block_cpu_limit = 0;
-      uint64_t                block_net_limit = 0;
+      uint64_t                block_cpu_limit = 0;             //块cpu限制
+      uint64_t                block_net_limit = 0;             //块net限制
       //string                  recent_slots;
       //double                  participation_rate = 0;
-      optional<string>        server_version_string;
-      optional<uint32_t>              fork_db_head_block_num;
-      optional<chain::block_id_type>  fork_db_head_block_id;
-      optional<string>        server_full_version_string;
+      optional<string>        server_version_string;           //服务器版本信息
+      optional<uint32_t>              fork_db_head_block_num;  //分叉头块号
+      optional<chain::block_id_type>  fork_db_head_block_id;   //分叉头块id
+      optional<string>        server_full_version_string;      //服务器完整的版本信息
    };
    get_info_results get_info(const get_info_params&) const;
 
-   struct get_activated_protocol_features_params {
-      optional<uint32_t>  lower_bound;
-      optional<uint32_t>  upper_bound;
-      uint32_t            limit = 10;
-      bool                search_by_block_num = false;
-      bool                reverse = false;
+   struct get_activated_protocol_features_params { //获得已经激活的协议特征参数
+      optional<uint32_t>  lower_bound;                 //区间下限
+      optional<uint32_t>  upper_bound;                 //区间上限
+      uint32_t            limit = 10;                  //限制条数  
+      bool                search_by_block_num = false; //是否通过块号搜索
+      bool                reverse = false;             //是否逆序搜索
    };
 
-   struct get_activated_protocol_features_results {
-      fc::variants        activated_protocol_features;
-      optional<uint32_t>  more;
+   struct get_activated_protocol_features_results { //获得已经激活的协议特征结果
+      fc::variants        activated_protocol_features; //已经激活的协议特征
+      optional<uint32_t>  more;                        //其他信息
    };
 
    get_activated_protocol_features_results get_activated_protocol_features( const get_activated_protocol_features_params& params )const;
 
-   struct producer_info {
-      name                       producer_name;
+   struct producer_info { //生产者信息
+      name                       producer_name; //生产者名字
    };
 
    using account_resource_limit = chain::resource_limits::account_resource_limit;
 
-   struct get_account_results {
-      name                       account_name;
-      uint32_t                   head_block_num = 0;
-      fc::time_point             head_block_time;
+   struct get_account_results { //获得账号结果
+      name                       account_name;              //账号名称
+      uint32_t                   head_block_num = 0;        //头块号
+      fc::time_point             head_block_time;           //头块时间
 
-      bool                       privileged = false;
-      fc::time_point             last_code_update;
-      fc::time_point             created;
+      bool                       privileged = false;        //是否是特权账号
+      fc::time_point             last_code_update;          //合约最后更新时间
+      fc::time_point             created;                   //创建时间
 
-      optional<asset>            core_liquid_balance;
+      optional<asset>            core_liquid_balance;       //核心流动资产
 
-      int64_t                    ram_quota  = 0;
-      int64_t                    net_weight = 0;
-      int64_t                    cpu_weight = 0;
+      int64_t                    ram_quota  = 0;            //拥有的ram数量
+      int64_t                    net_weight = 0;            //拥有的net数量
+      int64_t                    cpu_weight = 0;            //拥有的cpu数量
 
-      account_resource_limit     net_limit;
-      account_resource_limit     cpu_limit;
-      int64_t                    ram_usage = 0;
+      account_resource_limit     net_limit;                 //net限制
+      account_resource_limit     cpu_limit;                 //cpu限制
+      int64_t                    ram_usage = 0;             //ram限制
 
-      vector<permission>         permissions;
+      vector<permission>         permissions;               //权限
 
-      fc::variant                total_resources;
-      fc::variant                self_delegated_bandwidth;
-      fc::variant                refund_request;
-      fc::variant                voter_info;
-      fc::variant                rex_info;
+      fc::variant                total_resources;           //总资源数量
+      fc::variant                self_delegated_bandwidth;  //自己抵押的带宽
+      fc::variant                refund_request;            //付款请求
+      fc::variant                voter_info;                //投票信息
+      fc::variant                rex_info;                  //出租信息
    };
 
-   struct get_account_params {
-      name             account_name;
-      optional<symbol> expected_core_symbol;
+   struct get_account_params { //获得账号参数
+      name             account_name;         //账号
+      optional<symbol> expected_core_symbol; //货币类型
    };
    get_account_results get_account( const get_account_params& params )const;
 
 
-   struct get_code_results {
-      name                   account_name;
-      string                 wast;
-      string                 wasm;
-      fc::sha256             code_hash;
-      optional<abi_def>      abi;
+   struct get_code_results { //获得合约请求结果
+      name                   account_name; //部署人账号
+      string                 wast;         //wast
+      string                 wasm;         //wasm
+      fc::sha256             code_hash;    //合约hash
+      optional<abi_def>      abi;          //abi
    };
 
-   struct get_code_params {
-      name account_name;
-      bool code_as_wasm = false;
+   struct get_code_params { //获得合约时请求的参数
+      name account_name;         //部署人账号
+      bool code_as_wasm = false; //
    };
 
-   struct get_code_hash_results {
-      name                   account_name;
-      fc::sha256             code_hash;
+   struct get_code_hash_results { //获得合约hash结果
+      name                   account_name; //合约部署人
+      fc::sha256             code_hash;    //hash
    };
 
-   struct get_code_hash_params {
-      name account_name;
+   struct get_code_hash_params { //获得合约hash时请求的参数
+      name account_name; //合约部署者
    };
 
-   struct get_abi_results {
-      name                   account_name;
-      optional<abi_def>      abi;
+   struct get_abi_results { //获得abi返回的结果
+      name                   account_name; //abi所属账号
+      optional<abi_def>      abi;          //abi
    };
 
-   struct get_abi_params {
-      name account_name;
+   struct get_abi_params { //获得abi时请求的参数
+      name account_name; //abi所属账号
    };
 
-   struct get_raw_code_and_abi_results {
-      name                   account_name;
-      chain::blob            wasm;
-      chain::blob            abi;
+   struct get_raw_code_and_abi_results { //获得raw_code和abi返回的结果
+      name                   account_name; //合约部署者账号
+      chain::blob            wasm;         //wasm
+      chain::blob            abi;          //abi
    };
 
-   struct get_raw_code_and_abi_params {
-      name                   account_name;
+   struct get_raw_code_and_abi_params { //获得raw_code和abi时请求的参数
+      name                   account_name; //账号
    };
 
-   struct get_raw_abi_params {
-      name                   account_name;
-      optional<fc::sha256>   abi_hash;
+   struct get_raw_abi_params { //获得abi参数
+      name                   account_name; //账号
+      optional<fc::sha256>   abi_hash;     //abihash
    };
 
-   struct get_raw_abi_results {
-      name                   account_name;
-      fc::sha256             code_hash;
-      fc::sha256             abi_hash;
-      optional<chain::blob>  abi;
+   struct get_raw_abi_results { //获得abi结果
+      name                   account_name; //账号名
+      fc::sha256             code_hash;    //合约hash
+      fc::sha256             abi_hash;     //abi hash
+      optional<chain::blob>  abi;          //abi
    };
 
 
@@ -238,7 +239,7 @@ public:
 
 
 
-   struct abi_json_to_bin_params {
+   struct abi_json_to_bin_params { //
       name         code;
       name         action;
       fc::variant  args;
